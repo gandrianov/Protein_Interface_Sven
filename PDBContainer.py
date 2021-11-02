@@ -6,8 +6,13 @@ class PDBAtom:
 
 
 class PDBContainer:
-    def __init__(self, filename):
-        self.rows = self.read_file(filename)
+    def __init__(self, filename=None, pdb_string=None):
+
+        if filename is not None:
+            self.rows = self.read_file(filename)
+        elif pdb_string is not None:
+            self.rows= pdb_string.replace("\\n", "\n").split('\n')
+
         self.protein_rows = self.parse_protein_rows(self.rows) # <chain_id>:<list of coordinates>
         self.protein_coordinates = {key:self.parse_atom(value) for key, value in self.protein_rows.items()}
         self.ligand_rows = self.parse_ligand_rows(self.rows)
